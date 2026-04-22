@@ -1,0 +1,95 @@
+{
+  "user": {
+    "id": "user_001",
+    "name": "Rahul Sharma",
+    "risk_profile": "moderate",
+    "investment_goal": "wealth_creation",
+    "investment_horizon_years": 5
+  },
+  "portfolio": {
+    "total_invested": 500000,
+    "cash_balance": 25000,
+    "holdings": [
+      {
+        "symbol": "HDFCBANK.NS",
+        "name": "HDFC Bank Ltd",
+        "quantity": 50,
+        "avg_buy_price": 1580.0,
+        "sector": "Banking",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "TCS.NS",
+        "name": "Tata Consultancy Services",
+        "quantity": 20,
+        "avg_buy_price": 3750.0,
+        "sector": "IT",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "RELIANCE.NS",
+        "name": "Reliance Industries Ltd",
+        "quantity": 30,
+        "avg_buy_price": 2900.0,
+        "sector": "Energy",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "INFY.NS",
+        "name": "Infosys Ltd",
+        "quantity": 40,
+        "avg_buy_price": 1450.0,
+        "sector": "IT",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "SBIN.NS",
+        "name": "State Bank of India",
+        "quantity": 100,
+        "avg_buy_price": 620.0,
+        "sector": "Banking",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "SUNPHARMA.NS",
+        "name": "Sun Pharmaceutical Industries",
+        "quantity": 25,
+        "avg_buy_price": 1280.0,
+        "sector": "Pharma",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "MARUTI.NS",
+        "name": "Maruti Suzuki India Ltd",
+        "quantity": 5,
+        "avg_buy_price": 11500.0,
+        "sector": "Auto",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "ITC.NS",
+        "name": "ITC Ltd",
+        "quantity": 200,
+        "avg_buy_price": 420.0,
+        "sector": "FMCG",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "TATASTEEL.NS",
+        "name": "Tata Steel Ltd",
+        "quantity": 80,
+        "avg_buy_price": 145.0,
+        "sector": "Metal",
+        "asset_type": "equity"
+      },
+      {
+        "symbol": "BHARTIARTL.NS",
+        "name": "Bharti Airtel Ltd",
+        "quantity": 30,
+        "avg_buy_price": 1350.0,
+        "sector": "Telecom",
+        "asset_type": "equity"
+      }
+    ]
+  }
+}

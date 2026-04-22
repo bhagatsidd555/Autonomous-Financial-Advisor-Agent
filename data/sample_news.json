@@ -1,0 +1,47 @@
+[
+  {
+    "id": "news_001",
+    "headline": "RBI keeps repo rate unchanged at 6.5%, maintains withdrawal of accommodation stance",
+    "summary": "The Reserve Bank of India's Monetary Policy Committee (MPC) voted unanimously to keep the repo rate unchanged at 6.5% for the eighth consecutive time. The RBI governor emphasized continued focus on inflation management while supporting growth.",
+    "source": "Economic Times",
+    "published_at": "2025-04-22T10:00:00",
+    "category": "monetary_policy",
+    "tags": ["RBI", "repo rate", "monetary policy", "banking", "inflation"]
+  },
+  {
+    "id": "news_002",
+    "headline": "IT sector faces headwinds as US tech spending slows; TCS, Infosys under pressure",
+    "summary": "Indian IT companies are facing increased challenges as clients in the United States are cutting back on technology spending amid economic uncertainty. Analysts have revised earnings estimates downward for major IT companies including TCS and Infosys.",
+    "source": "Business Standard",
+    "published_at": "2025-04-22T09:30:00",
+    "category": "sector_news",
+    "tags": ["IT sector", "TCS", "Infosys", "US economy", "tech spending"]
+  },
+  {
+    "id": "news_003",
+    "headline": "Reliance Industries Q4 results beat estimates; Jio and Retail segments show strong growth",
+    "summary": "Reliance Industries reported better-than-expected quarterly results with consolidated net profit rising 12% year-on-year. The Jio telecom segment saw strong subscriber additions while the retail division showed robust growth in both online and offline channels.",
+    "source": "Moneycontrol",
+    "published_at": "2025-04-22T08:15:00",
+    "category": "earnings",
+    "tags": ["Reliance Industries", "Q4 results", "Jio", "retail", "earnings beat"]
+  },
+  {
+    "id": "news_004",
+    "headline": "Global markets rally on Fed signals; Nifty 50 opens in green",
+    "summary": "Global equity markets rallied after US Federal Reserve officials signaled potential rate cuts in the second half of 2025. Indian markets opened higher with the Nifty 50 gaining 0.8% in early trade, led by banking and IT stocks.",
+    "source": "LiveMint",
+    "published_at": "2025-04-22T08:00:00",
+    "category": "market_news",
+    "tags": ["Fed rate cut", "global markets", "Nifty 50", "bullish", "banking"]
+  },
+  {
+    "id": "news_005",
+    "headline": "Auto sector outlook dims as EV transition costs weigh on margins; Maruti, M&M cautious",
+    "summary": "The Indian automobile sector is facing margin pressures as companies invest heavily in electric vehicle infrastructure. Maruti Suzuki and Mahindra & Mahindra have guided for higher capital expenditure in FY26, which analysts believe will weigh on near-term profitability.",
+    "source": "Economic Times",
+    "published_at": "2025-04-21T16:00:00",
+    "category": "sector_news",
+    "tags": ["auto sector", "EV", "Maruti", "M&M", "capex", "margins"]
+  }
+]
