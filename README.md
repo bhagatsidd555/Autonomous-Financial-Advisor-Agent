@@ -37,7 +37,6 @@ The **Autonomous Financial Advisor Agent** is a multi-phase reasoning pipeline b
 6. **Detects conflicts** — explains when positive news co-exists with falling prices
 7. **Self-evaluates** — scores its own reasoning quality (Reasoning Quality, Factual Consistency, Actionability, Clarity, Data Coverage)
 
----
 
 ## Architecture
 
