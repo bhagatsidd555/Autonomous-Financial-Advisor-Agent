@@ -20,7 +20,7 @@
 7. [Sample Output](#sample-output)
 8. [How the Reasoning Works](#how-the-reasoning-works)
 9. [Observability](#observability)
-10. [Running Tests](#running-tests)
+10. [Running Tests](#running-tests)py
 11. [Design Decisions](#design-decisions)
 
 ---

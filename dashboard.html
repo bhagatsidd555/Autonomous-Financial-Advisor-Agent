@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FinAdvisor AI</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+:root{--bg:#0b0e13;--bg2:#111520;--bg3:#161c2a;--card:#1a2235;--border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.12);--text:#e8edf5;--muted:#7a8499;--accent:#4f8ef7;--accent2:#6ee7b7;--red:#f87171;--amber:#fbbf24;--green:#34d399;--purple:#a78bfa}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font-size:14px;min-height:100vh}
+.header{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);background:var(--bg2);position:sticky;top:0;z-index:100}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--purple));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo-text{font-family:'DM Serif Display',serif;font-size:18px}
+.logo-sub{font-size:11px;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.header-right{display:flex;align-items:center;gap:12px}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 6px var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.btn{padding:8px 18px;border-radius:8px;font-size:13px;font-family:'Outfit',sans-serif;font-weight:500;cursor:pointer;border:1px solid var(--border2);background:var(--card);color:var(--text);transition:all .2s}
+.btn:hover{background:var(--bg3);border-color:var(--accent)}
+.btn-primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+.btn-primary:hover{background:#3a7de8}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.container{max-width:1400px;margin:0 auto;padding:24px 32px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.grid-main{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 22px}
+.card-title{font-size:11px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.metric-label{font-size:12px;color:var(--muted);margin-bottom:6px}
+.metric-value{font-family:'DM Mono',monospace;font-size:26px;font-weight:500}
+.metric-change{font-size:12px;margin-top:4px;font-family:'DM Mono',monospace}
+.pos{color:var(--green)}.neg{color:var(--red)}.neu{color:var(--muted)}
+.index-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.index-item{background:var(--bg3);border-radius:10px;padding:12px 14px;border:1px solid var(--border)}
+.index-name{font-size:11px;color:var(--muted);margin-bottom:4px}
+.index-val{font-family:'DM Mono',monospace;font-size:14px;font-weight:500}
+.index-chg{font-family:'DM Mono',monospace;font-size:12px;margin-top:2px}
+.sentiment-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;font-size:12px;font-weight:500;margin-bottom:14px}
+.sentiment-bullish{background:rgba(52,211,153,.15);color:var(--green);border:1px solid rgba(52,211,153,.3)}
+.sentiment-bearish{background:rgba(248,113,113,.15);color:var(--red);border:1px solid rgba(248,113,113,.3)}
+.sentiment-neutral{background:rgba(122,132,153,.15);color:var(--muted);border:1px solid rgba(122,132,153,.3)}
+.holdings-table{width:100%;border-collapse:collapse;font-size:13px}
+.holdings-table th{text-align:left;padding:8px 10px;font-size:11px;font-weight:500;letter-spacing:.05em;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border)}
+.holdings-table td{padding:10px 10px;border-bottom:1px solid var(--border)}
+.holdings-table tr:last-child td{border-bottom:none}
+.holdings-table tr:hover td{background:rgba(255,255,255,.02)}
+.symbol-badge{display:inline-block;padding:2px 8px;border-radius:5px;background:rgba(79,142,247,.12);color:var(--accent);font-family:'DM Mono',monospace;font-size:12px}
+.sector-tag{font-size:11px;color:var(--muted);background:var(--bg3);padding:2px 6px;border-radius:4px}
+.mono{font-family:'DM Mono',monospace}
+.insight-box{background:linear-gradient(135deg,rgba(79,142,247,.08),rgba(167,139,250,.08));border:1px solid rgba(79,142,247,.2);border-radius:14px;padding:20px 22px;margin-bottom:24px}
+.insight-header{display:flex;align-items:center;gap:8px;margin-bottom:12px}
+.insight-icon{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--purple));display:flex;align-items:center;justify-content:center;font-size:14px}
+.insight-title{font-size:13px;font-weight:500;color:var(--accent)}
+.insight-text{font-size:14px;line-height:1.7;color:var(--text)}
+.chain-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border)}
+.chain-item:last-child{border-bottom:none}
+.chain-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.chain-cause{font-size:12px;color:var(--muted);margin-bottom:3px}
+.chain-effect{font-size:13px;color:var(--text)}
+.chain-conf{font-family:'DM Mono',monospace;font-size:11px;padding:2px 6px;border-radius:4px;margin-left:auto;flex-shrink:0;background:var(--bg3);color:var(--muted)}
+.news-item{padding:12px 0;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px}
+.news-item:last-child{border-bottom:none}
+.news-impact{font-size:10px;font-weight:600;letter-spacing:.06em;padding:2px 6px;border-radius:4px;flex-shrink:0;margin-top:2px}
+.impact-HIGH{background:rgba(248,113,113,.15);color:var(--red)}
+.impact-MED{background:rgba(251,191,36,.15);color:var(--amber)}
+.impact-LOW{background:rgba(122,132,153,.12);color:var(--muted)}
+.news-title{font-size:13px;line-height:1.5}
+.news-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.grade-circle{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:24px;border:2px solid var(--accent);color:var(--accent);float:right;margin-left:12px}
+.eval-bar-wrap{margin-bottom:10px}
+.eval-bar-label{display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;color:var(--muted)}
+.eval-bar-track{background:var(--bg3);border-radius:4px;height:5px;overflow:hidden}
+.eval-bar-fill{height:5px;border-radius:4px;background:var(--accent);transition:width 1s ease}
+.alert-item{display:flex;align-items:flex-start;gap:8px;padding:10px 12px;border-radius:8px;margin-bottom:8px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.15);font-size:13px;line-height:1.5}
+.alert-icon{color:var(--amber);margin-top:1px;flex-shrink:0}
+.conflict-item{padding:12px;border-radius:8px;margin-bottom:8px;background:rgba(248,113,113,.06);border:1px solid rgba(248,113,113,.15)}
+.conflict-entity{font-size:12px;color:var(--red);margin-bottom:4px;font-weight:500}
+.conflict-text{font-size:13px;color:var(--muted);line-height:1.5}
+.sector-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.sector-name{font-size:12px;color:var(--muted);width:80px;flex-shrink:0}
+.sector-bar-track{flex:1;background:var(--bg3);border-radius:4px;height:6px;overflow:hidden}
+.sector-bar-fill{height:6px;border-radius:4px;background:var(--accent)}
+.sector-pct{font-family:'DM Mono',monospace;font-size:12px;color:var(--text);width:36px;text-align:right}
+.loading{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:400px;gap:16px}
+.spinner{width:36px;height:36px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{color:var(--muted);font-size:14px}
+.loading-step{color:var(--accent);font-size:12px;font-family:'DM Mono',monospace}
+.error-box{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);border-radius:12px;padding:24px;text-align:center;color:var(--red)}
+.divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+</style>
+</head>
+<body>
+<header class="header">
+  <div class="logo">
+    <div class="logo-icon">◈</div>
+    <div>
+      <div class="logo-text">FinAdvisor AI</div>
+      <div class="logo-sub">Autonomous Portfolio Intelligence</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="status-dot"></div>
+    <span style="font-size:12px;color:var(--muted)" id="statusText">Ready</span>
+    <button class="btn btn-primary" id="analyzeBtn" onclick="runAnalysis()">▶ Run Analysis</button>
+  </div>
+</header>
+
+<div class="container" id="mainContent">
+  <div id="landingState" style="text-align:center;padding:80px 0">
+    <div style="font-family:'DM Serif Display',serif;font-size:42px;margin-bottom:16px">Know <em>why</em> your portfolio moved.</div>
+    <div style="font-size:16px;color:var(--muted);max-width:520px;margin:0 auto 32px;line-height:1.7">AI-powered causal reasoning links market events → sector trends → your specific stocks → portfolio impact.</div>
+    <button class="btn btn-primary" style="padding:12px 32px;font-size:15px" onclick="runAnalysis()">▶ Analyze Portfolio Now</button>
+    <div style="margin-top:48px;display:flex;justify-content:center;gap:40px;color:var(--muted);font-size:13px">
+      <span>📊 Live NSE/BSE data</span><span>🔗 Causal chain reasoning</span><span>📰 Real-time news</span><span>🎯 Self-graded insights</span>
+    </div>
+  </div>
+
+  <div id="loadingState" class="loading" style="display:none">
+    <div class="spinner"></div>
+    <div class="loading-text">Running autonomous analysis…</div>
+    <div class="loading-step" id="loadingStep">Fetching market data…</div>
+  </div>
+
+  <div id="errorState" class="error-box" style="display:none">
+    <div style="font-size:32px;margin-bottom:12px">⚠</div>
+    <div style="font-size:16px;font-weight:500;margin-bottom:8px">Analysis Failed</div>
+    <div id="errorMsg" style="font-size:13px;color:var(--muted)"></div>
+    <div style="margin-top:16px;font-size:12px;color:var(--muted)">Make sure <code style="color:var(--accent)">uvicorn api_server:app --reload --port 8000</code> is running</div>
+  </div>
+
+  <div id="dashboard" style="display:none">
+    <div style="margin-bottom:24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:2px">Portfolio for</div>
+          <div style="font-size:20px;font-weight:500" id="userName">—</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <span id="marketSentiment" class="sentiment-badge sentiment-bearish">● Bearish</span>
+          <div style="font-size:12px;color:var(--muted)">NIFTY <span id="niftyChange" class="mono">—</span></div>
+          <button class="btn" onclick="runAnalysis()" style="font-size:12px;padding:6px 14px">↺ Refresh</button>
+        </div>
+      </div>
+      <div class="grid-4">
+        <div class="card"><div class="metric-label">Invested</div><div class="metric-value" id="totalInvested">—</div></div>
+        <div class="card"><div class="metric-label">Current Value</div><div class="metric-value" id="currentValue">—</div><div class="metric-change" id="overallPnl">—</div></div>
+        <div class="card"><div class="metric-label">Today's P&L</div><div class="metric-value" id="dailyPnl">—</div><div class="metric-change" id="dailyPct">—</div></div>
+        <div class="card"><div class="metric-label">Risk Level</div><div class="metric-value" id="riskLevel" style="font-size:18px;text-transform:capitalize">—</div><div class="metric-change" id="runTime" style="color:var(--muted)">—</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:24px">
+      <div class="card-title">◈ Market Indices</div>
+      <div class="index-grid" id="indicesGrid"></div>
+    </div>
+
+    <div class="insight-box">
+      <div class="insight-header">
+        <div class="insight-icon">◆</div>
+        <div class="insight-title">AI ADVISOR INSIGHT</div>
+        <div style="margin-left:auto;font-size:12px;color:var(--muted)">Confidence: <span id="confidenceScore" class="mono" style="color:var(--accent)">—</span></div>
+      </div>
+      <div class="insight-text" id="marketNarrative">—</div>
+      <hr class="divider">
+      <div class="insight-text" id="portfolioImpact" style="color:var(--muted)"></div>
+    </div>
+
+    <div class="grid-main">
+      <div class="card">
+        <div class="card-title">▤ Holdings</div>
+        <div style="overflow-x:auto">
+          <table class="holdings-table">
+            <thead><tr><th>Symbol</th><th>Sector</th><th style="text-align:right">Avg Buy</th><th style="text-align:right">CMP</th><th style="text-align:right">Value</th><th style="text-align:right">Unrealised P&L</th><th style="text-align:right">Day P&L</th></tr></thead>
+            <tbody id="holdingsBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-title">◉ Sector Allocation</div>
+          <div id="sectorBars"></div>
+          <div style="position:relative;height:200px;margin-top:12px"><canvas id="sectorChart" role="img" aria-label="Sector allocation donut chart"></canvas></div>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--amber)">⚠ Risk Alerts</div>
+          <div id="riskAlerts"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">⟶ Causal Chain Analysis</div>
+        <div id="causalChains"></div>
+        <hr class="divider">
+        <div class="card-title" style="margin-bottom:10px">💡 Actionable Insights</div>
+        <div id="actionableInsights"></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="card">
+          <div class="card-title">📰 Relevant News</div>
+          <div id="newsList"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">★ Self-Evaluation</div>
+          <div style="display:flex;align-items:center;gap:16px;margin-bottom:16px">
+            <div class="grade-circle" id="gradeCircle">B</div>
+            <div><div style="font-size:20px;font-weight:500" id="evalScore">—</div><div style="font-size:12px;color:var(--muted)">Overall quality score</div></div>
+          </div>
+          <div id="evalBars"></div>
+          <div id="evalAreas" style="margin-top:12px"></div>
+        </div>
+        <div class="card" id="conflictsCard" style="display:none">
+          <div class="card-title" style="color:var(--red)">⚡ Signal Conflicts</div>
+          <div id="conflictsList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API='http://localhost:8000';
+let sectorChart=null;
+function inr(n){if(Math.abs(n)>=100000)return '₹'+(n/100000).toFixed(2)+'L';return '₹'+n.toLocaleString('en-IN')}
+function pct(n){return (n>=0?'+':'')+n.toFixed(2)+'%'}
+function clr(n){return n>0?'pos':n<0?'neg':'neu'}
+
+async function runAnalysis(){
+  document.getElementById('landingState').style.display='none';
+  document.getElementById('dashboard').style.display='none';
+  document.getElementById('errorState').style.display='none';
+  document.getElementById('loadingState').style.display='flex';
+  document.getElementById('analyzeBtn').disabled=true;
+  document.getElementById('statusText').textContent='Analyzing…';
+  const steps=['Fetching live NIFTY/SENSEX data…','Loading portfolio holdings…','Classifying financial news…','Running causal reasoning…','Self-evaluating output…'];
+  let si=0;
+  const stepEl=document.getElementById('loadingStep');
+  const iv=setInterval(()=>{if(si<steps.length)stepEl.textContent=steps[si++]},1800);
+  try{
+    const res=await fetch(API+'/api/analyze',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({portfolio_path:'data/sample_portfolio.json'})});
+    clearInterval(iv);
+    if(!res.ok){const e=await res.json().catch(()=>({detail:res.statusText}));throw new Error(e.detail||'Server error '+res.status)}
+    const data=await res.json();
+    renderDashboard(data);
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('dashboard').style.display='block';
+    document.getElementById('statusText').textContent='Live';
+  }catch(e){
+    clearInterval(iv);
+    document.getElementById('loadingState').style.display='none';
+    document.getElementById('errorState').style.display='block';
+    document.getElementById('errorMsg').textContent=e.message;
+    document.getElementById('statusText').textContent='Error';
+  }
+  document.getElementById('analyzeBtn').disabled=false;
+}
+
+function renderDashboard(d){
+  const s=d.summary,m=d.market,r=d.reasoning,ev=d.evaluation;
+  document.getElementById('userName').textContent=d.user_name||'Investor';
+  document.getElementById('runTime').textContent='Completed in '+d.run_time_s+'s';
+  const sentEl=document.getElementById('marketSentiment');
+  const sent=(m.sentiment||'neutral').toLowerCase();
+  sentEl.className='sentiment-badge sentiment-'+(sent.includes('bull')?'bullish':sent.includes('bear')?'bearish':'neutral');
+  sentEl.textContent='● '+m.sentiment;
+  const nc=m.nifty_change||0;
+  document.getElementById('niftyChange').textContent=pct(nc);
+  document.getElementById('niftyChange').className='mono '+clr(nc);
+  document.getElementById('totalInvested').textContent=inr(s.total_invested);
+  document.getElementById('currentValue').textContent=inr(s.current_value);
+  document.getElementById('overallPnl').innerHTML='<span class="'+clr(s.overall_pnl)+'">'+inr(s.overall_pnl)+' ('+pct(s.overall_pnl_pct)+')</span>';
+  document.getElementById('dailyPnl').textContent=inr(s.daily_pnl);
+  document.getElementById('dailyPnl').className='metric-value '+clr(s.daily_pnl);
+  document.getElementById('dailyPct').innerHTML='<span class="'+clr(s.daily_pnl_pct)+'">'+pct(s.daily_pnl_pct)+'</span>';
+  document.getElementById('riskLevel').textContent=s.risk_level||'Moderate';
+  const ig=document.getElementById('indicesGrid');ig.innerHTML='';
+  (m.indices||[]).slice(0,8).forEach(idx=>{const c=idx.change_pct||0;ig.innerHTML+=`<div class="index-item"><div class="index-name">${idx.name.replace('NIFTY_','').replace(/_/g,' ')}</div><div class="index-val">${idx.price?idx.price.toLocaleString('en-IN'):'—'}</div><div class="index-chg ${clr(c)}">${pct(c)}</div></div>`});
+  document.getElementById('marketNarrative').textContent=r.market_narrative||'—';
+  document.getElementById('portfolioImpact').textContent=r.portfolio_impact||'';
+  document.getElementById('confidenceScore').textContent=Math.round((r.confidence_score||0.8)*100)+'%';
+  const tbody=document.getElementById('holdingsBody');tbody.innerHTML='';
+  (d.holdings||[]).forEach(h=>{const up=h.unrealised_pnl||0,dp=h.daily_pnl||0,upp=h.unrealised_pnl_pct||0,dpp=h.daily_pnl_pct||0;tbody.innerHTML+=`<tr><td><span class="symbol-badge">${h.symbol.replace('.NS','')}</span></td><td><span class="sector-tag">${h.sector}</span></td><td class="mono" style="text-align:right">₹${(h.avg_buy_price||0).toLocaleString('en-IN',{maximumFractionDigits:1})}</td><td class="mono" style="text-align:right">₹${(h.current_price||0).toLocaleString('en-IN',{maximumFractionDigits:1})}</td><td class="mono" style="text-align:right">${inr(h.current_value||0)}</td><td class="mono ${clr(up)}" style="text-align:right">${inr(up)} (${pct(upp)})</td><td class="mono ${clr(dp)}" style="text-align:right">${inr(dp)}</td></tr>`});
+  const sectors=d.sector_allocation||[];
+  const sbEl=document.getElementById('sectorBars');sbEl.innerHTML='';
+  sectors.slice(0,6).forEach(s=>{sbEl.innerHTML+=`<div class="sector-row"><div class="sector-name">${s.sector}</div><div class="sector-bar-track"><div class="sector-bar-fill" style="width:${s.weight}%"></div></div><div class="sector-pct">${s.weight}%</div></div>`});
+  if(sectorChart)sectorChart.destroy();
+  const pal=['#4f8ef7','#6ee7b7','#a78bfa','#fbbf24','#f87171','#34d399','#818cf8','#fb923c'];
+  sectorChart=new Chart(document.getElementById('sectorChart'),{type:'doughnut',data:{labels:sectors.map(s=>s.sector),datasets:[{data:sectors.map(s=>s.weight),backgroundColor:pal.slice(0,sectors.length),borderWidth:2,borderColor:'#1a2235'}]},options:{responsive:true,maintainAspectRatio:false,cutout:'68%',plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>' '+ctx.label+': '+ctx.parsed.toFixed(1)+'%'}}}}});
+  const raEl=document.getElementById('riskAlerts');raEl.innerHTML='';
+  if(!(d.risk_alerts||[]).length){raEl.innerHTML='<div style="color:var(--muted);font-size:13px">No critical alerts.</div>'}
+  else{d.risk_alerts.forEach(a=>{raEl.innerHTML+=`<div class="alert-item"><span class="alert-icon">⚠</span>${a}</div>`})}
+  const ccEl=document.getElementById('causalChains');ccEl.innerHTML='';
+  const cp=['#4f8ef7','#a78bfa','#fbbf24','#f87171','#34d399'];
+  (r.causal_chains||[]).forEach((ch,i)=>{const conf=Math.round((ch.confidence||.5)*100);ccEl.innerHTML+=`<div class="chain-item"><div class="chain-dot" style="background:${cp[i%cp.length]}"></div><div style="flex:1"><div class="chain-cause">${ch.cause}</div><div class="chain-effect">${ch.effect}</div>${ch.mechanism?`<div style="font-size:11px;color:var(--muted);margin-top:3px;font-style:italic">${ch.mechanism}</div>`:''}</div><div class="chain-conf">${conf}%</div></div>`});
+  if(!(r.causal_chains||[]).length)ccEl.innerHTML='<div style="color:var(--muted);font-size:13px">No causal chains generated.</div>';
+  const aiEl=document.getElementById('actionableInsights');aiEl.innerHTML='';
+  (r.actionable_insights||[]).forEach((ins,i)=>{aiEl.innerHTML+=`<div style="display:flex;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)"><span style="color:var(--accent);font-weight:500;flex-shrink:0">${i+1}.</span><span style="font-size:13px;line-height:1.6">${ins}</span></div>`});
+  const nlEl=document.getElementById('newsList');nlEl.innerHTML='';
+  (d.news||[]).slice(0,5).forEach(n=>{const sc=n.sentiment==='positive'?'pos':n.sentiment==='negative'?'neg':'neu';nlEl.innerHTML+=`<div class="news-item"><div class="news-impact impact-${n.impact}">${n.impact}</div><div><div class="news-title">${n.title}</div><div class="news-meta"><span class="${sc}">${n.sentiment}</span>${n.affected_sectors.length?' · '+n.affected_sectors.slice(0,2).join(', '):''}</div></div></div>`});
+  document.getElementById('gradeCircle').textContent=ev.grade||'B';
+  document.getElementById('evalScore').textContent=Math.round((ev.score||.7)*100)+'%';
+  const dims=[['Reasoning Quality',ev.reasoning_quality],['Factual Consistency',ev.factual_consistency],['Actionability',ev.actionability],['Clarity',ev.clarity],['Data Coverage',ev.data_coverage]];
+  const ebEl=document.getElementById('evalBars');ebEl.innerHTML='';
+  dims.forEach(([l,v])=>{const w=Math.round((v||0)*100);ebEl.innerHTML+=`<div class="eval-bar-wrap"><div class="eval-bar-label"><span>${l}</span><span>${w}%</span></div><div class="eval-bar-track"><div class="eval-bar-fill" style="width:${w}%"></div></div></div>`});
+  const eaEl=document.getElementById('evalAreas');eaEl.innerHTML='';
+  (ev.areas_to_improve||[]).slice(0,3).forEach(a=>{eaEl.innerHTML+=`<div style="font-size:12px;color:var(--muted);padding:4px 0;border-left:2px solid var(--border2);padding-left:8px;margin-bottom:6px">${a}</div>`});
+  if((d.conflicts||[]).length){document.getElementById('conflictsCard').style.display='block';const clEl=document.getElementById('conflictsList');clEl.innerHTML='';d.conflicts.forEach(c=>{clEl.innerHTML+=`<div class="conflict-item"><div class="conflict-entity">⚡ ${c.entity||'Market'}</div><div class="conflict-text">${c.explanation}</div></div>`})}
+}
+</script>
+</body>
+</html>
