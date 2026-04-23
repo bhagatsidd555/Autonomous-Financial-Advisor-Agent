@@ -224,7 +224,7 @@ body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;font
 </div>
 
 <script>
-const API='http://localhost:8000';
+const API='https://autonomous-financial-advisor-agent.vercel.app/';
 let sectorChart=null;
 function inr(n){if(Math.abs(n)>=100000)return '₹'+(n/100000).toFixed(2)+'L';return '₹'+n.toLocaleString('en-IN')}
 function pct(n){return (n>=0?'+':'')+n.toFixed(2)+'%'}
